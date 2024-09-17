@@ -2,6 +2,7 @@ package com.api.usuario.units;
 
 import com.api.usuario.model.dto.SignInDto;
 import com.api.usuario.model.dto.UserDto;
+import com.api.usuario.model.dto.UserNewDto;
 import com.api.usuario.model.entity.Token;
 import com.api.usuario.model.entity.User;
 import com.api.usuario.model.mapper.UserMapper;
@@ -59,7 +60,7 @@ public class UserControllerTest {
                 .token(token.getToken())
                 .build();
 
-        given(userMapper.userDtoToUser(userService.saveUser(any(UserDto.class)))).willReturn(userDto);
+        given(userMapper.userDtoToUser(userService.saveUser(any(UserNewDto.class)))).willReturn(userDto);
 
         ResultActions resultActions = mockMvc.perform(post("/v1/user")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -4,6 +4,7 @@ import com.api.usuario.config.exception.UserException;
 import com.api.usuario.config.security.jwt.JwtUtils;
 import com.api.usuario.config.utils.PasswordValidator;
 import com.api.usuario.model.dto.UserDto;
+import com.api.usuario.model.dto.UserNewDto;
 import com.api.usuario.model.entity.User;
 import com.api.usuario.model.mapper.UserMapper;
 import com.api.usuario.repo.UserRepo;
@@ -42,25 +43,25 @@ public class UserServiceImpl implements UserService {
         return userMapper.map(userRepo.findAll());
     }
 
-    public UserDto saveUser(UserDto userDto) {
+    public UserDto saveUser(UserNewDto userNewDto) {
 
-        if (!EmailValidator.getInstance().isValid(userDto.getEmail())) {
+        if (!EmailValidator.getInstance().isValid(userNewDto.getEmail())) {
             throw new UserException("Favor ingresar un correo válido.");
         }
-        if (!PasswordValidator.isValidPassword(userDto.getPassword()))
+        if (!PasswordValidator.isValidPassword(userNewDto.getPassword()))
             throw new UserException("La contraseña no cumple el formato adecuado. " +
                     "(Una mayuscula, letras minúsculas, y dos numeros)");
 
 
         boolean existe = obtenerUsers().stream().anyMatch(
-                x -> x.getEmail().equalsIgnoreCase(userDto.getEmail()));
+                x -> x.getEmail().equalsIgnoreCase(userNewDto.getEmail()));
         if (existe) {
             throw new UserException("El correo ingresado ya se encuentra registrado.");
         }
 
-        User user = userMapper.userDtoToUser(userDto);
+        User user = userMapper.userNewDtoToUser(userNewDto);
 
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(userNewDto.getPassword()));
 
         if (user.getId() == null) {
             user.setCreated(new Date());

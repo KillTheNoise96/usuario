@@ -1,6 +1,7 @@
 package com.api.usuario.controller;
 
 import com.api.usuario.model.dto.UserDto;
+import com.api.usuario.model.dto.UserNewDto;
 import com.api.usuario.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService userService;
@@ -22,8 +24,8 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> saveUserInfo(@RequestBody @Valid UserDto userDto) {
-        return new ResponseEntity<>(userService.saveUser(userDto),
+    public ResponseEntity<?> saveUserInfo(@RequestBody @Valid UserNewDto userNewDto) {
+        return new ResponseEntity<>(userService.saveUser(userNewDto),
                 HttpStatus.CREATED);
     }
 

@@ -3,6 +3,7 @@ package com.api.usuario.units;
 import com.api.usuario.config.security.jwt.JwtUtils;
 import com.api.usuario.model.dto.SignInDto;
 import com.api.usuario.model.dto.UserDto;
+import com.api.usuario.model.dto.UserNewDto;
 import com.api.usuario.model.entity.Phone;
 import com.api.usuario.model.entity.Token;
 import com.api.usuario.model.entity.User;
@@ -40,9 +41,8 @@ public class UserServiceTest {
     private User user;
     private final List<User> userList = new ArrayList<>();
     private UserDto userDto;
+    private UserNewDto userNewDto;
     private SignInDto sign;
-
-    private Token token;
 
     @BeforeEach
     void setup() {
@@ -54,12 +54,11 @@ public class UserServiceTest {
         user.setPhones(phonesList);
 
         userDto = userDto.builder().name(user.getName()).email(user.getEmail()).password(user.getPassword()).build();
+        userNewDto = userNewDto.builder().name(user.getName()).email(user.getEmail()).password(user.getPassword()).build();
 
         sign = sign.builder().email(user.getEmail()).password(user.getPassword()).build();
 
         userList.add(user);
-
-        token = new Token("1234");
     }
 
     @DisplayName("Prueba guardar un usuario.")
@@ -68,7 +67,7 @@ public class UserServiceTest {
         given(userRepo.save(user)).willReturn(user);
         given(userMapper.userDtoToUser(userDto)).willReturn(user);
 //        given(jwtGenerator.generateToken(user)).willReturn(token);
-        User savedUser = userMapper.userDtoToUser(userService.saveUser(userDto));
+        User savedUser = userMapper.userDtoToUser(userService.saveUser(userNewDto));
         assertThat(savedUser).isNotNull();
     }
 
